@@ -23,7 +23,7 @@ AI Agent 基础设施 · 分布式系统 · LLM 安全
 
 ## 精选项目
 
-### 🚧 [phase-barrier](https://github.com/Xuqing0415/phase-barrier) — 编码 Agent 的阶段门禁框架
+### [phase-barrier](https://github.com/Xuqing0415/phase-barrier) — 编码 Agent 的阶段门禁框架
 
 [![PyPI](https://img.shields.io/pypi/v/phase-barrier.svg)](https://pypi.org/project/phase-barrier/)
 [![Docs](https://img.shields.io/badge/Docs-docs.xshayncka.dev-blue.svg)](https://docs.xshayncka.dev/)
@@ -45,7 +45,7 @@ SWE-bench Lite Scale-20 实测（同模型同预算，20 实例配对）：
 pip install phase-barrier
 ```
 
-### 🤖 [alpha-swe](https://github.com/Xuqing0415/alpha-swe) — 最小可扩展的 SWE Agent
+### [alpha-swe](https://github.com/Xuqing0415/alpha-swe) — 最小可扩展的 SWE Agent
 
 异步状态机 + DAG 任务调度，长期记忆闭环（经验/代码/错误多后端可插拔），
 技能注入、上下文压缩、安全沙箱、多 Agent 协作与用户中断。
@@ -53,22 +53,22 @@ pip install phase-barrier
 phase-barrier 已通过编排器钩子 SDK 双向接入 —— 校验逻辑留在 phase-barrier 内部，
 Agent 侧只做轻量调用，职责不越界。
 
-### 🗄️ [OxideDB](https://github.com/Xuqing0415/OxideDB) — 分布式事务 KV 数据库
+### [OxideDB](https://github.com/Xuqing0415/OxideDB) — 分布式事务 KV 数据库
 
 Python 实现：Raft 复制 + Percolator 式两阶段提交（跨节点 ACID）+ MVCC 快照读 + 范围分片键空间。
 v0.1.0 时 414 项测试通过。定位是**能跑的原型**而非生产数据库，已知缺口在 `docs/design.md` 里写得很直白。
 
-### 🛡️ [llm_compliance_audit](https://github.com/Xuqing0415/llm_compliance_audit) — LLM 合规审计网关
+### [llm_compliance_audit](https://github.com/Xuqing0415/llm_compliance_audit) — LLM 合规审计网关
 
 挡在 OpenAI 兼容 API 前面的反向代理：身份证 / 手机号 / 银行卡 / 邮箱等 PII 出境默认拦截，
 提示词注入、命令注入、SQL 注入独立规则。响应侧**先拦后放**——非流式整体扫描后下发，
 SSE 流式走滑动窗口，命中即终止帧，敏感内容零泄露。审计日志正文脱敏 + SHA-256 链式哈希防篡改。
 
-### 📨 [DistributedMQ](https://github.com/Xuqing0415/DistributedMQ) — 高性能分布式消息队列
+### [DistributedMQ](https://github.com/Xuqing0415/DistributedMQ) — 高性能分布式消息队列
 
 Raft 共识 + 分段提交日志（稀疏索引）+ 时间轮延迟消息 + 死信队列 + 全链路消息追踪，多语言客户端。
 
-### ☁️ [hermes-cosmos](https://github.com/Xuqing0415/hermes-cosmos) — 全球统一调度与容错计算系统
+### [hermes-cosmos](https://github.com/Xuqing0415/hermes-cosmos) — 全球统一调度与容错计算系统
 
 跨 Region 万卡级 GPU 调度：基于 MCTS 的放置策略、分布式 Checkpoint、故障预测与自动迁移、eBPF 算子级观测、碳排放计量。
 
