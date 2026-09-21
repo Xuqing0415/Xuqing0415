@@ -19,20 +19,25 @@ AI Agent 基础设施 · 分布式系统 · LLM 安全
 
 现在的编码 Agent 拿到需求就直奔实现——跳过需求分析、跳过设计、跳过测试用例，写完就宣称"完成"。短期看快，长期看是债务：理解偏差没人发现，回归保障为零，交付的东西没法维护。这个问题的本质不是模型不够聪明，而是**流程约束缺失**。
 
-所以我把分布式系统里的 **phase-barrier（阶段栅栏）** 概念借过来，做成 Agent 工具调用层的一道闸门：需求 → spec → 测试 → 实现 → 测试 → 修复 → 交付，每个阶段要交出可验证的证据（spec 章节、测试 AST、语法检查、覆盖率），**先有证据，才放行下一步**，跳步和伪造产出会被直接拦下。
-
 ## 精选项目
 
 ### [phase-barrier](https://github.com/Xuqing0415/phase-barrier) — 编码 Agent 的阶段门禁框架
+
+v1.0.0，公开 API 已冻结。SWE-bench Lite 实测 20/20 resolved（无门禁 baseline 18/20）。
 
 [![PyPI](https://img.shields.io/pypi/v/phase-barrier.svg)](https://pypi.org/project/phase-barrier/)
 [![Docs](https://img.shields.io/badge/Docs-docs.xshayncka.dev-blue.svg)](https://docs.xshayncka.dev/)
 [![CI](https://github.com/Xuqing0415/phase-barrier/actions/workflows/ci.yml/badge.svg)](https://github.com/Xuqing0415/phase-barrier/actions/workflows/ci.yml)
 
-v1.0.0，公开 API 已冻结。13 种语言适配器，工具拦截 + HMAC 状态签名 + SHA-256 证据清单；
+<details>
+<summary>展开：门禁怎么拦、四种接入方式、SWE-bench 实测数据</summary>
+
+所以我把分布式系统里的 **phase-barrier（阶段栅栏）** 概念借过来，做成 Agent 工具调用层的一道闸门：需求 → spec → 测试 → 实现 → 测试 → 修复 → 交付，每个阶段要交出可验证的证据（spec 章节、测试 AST、语法检查、覆盖率），**先有证据，才放行下一步**，跳步和伪造产出会被直接拦下。
+
+13 种语言适配器，工具拦截 + HMAC 状态签名 + SHA-256 证据清单；
 覆盖进程内包装、CLI 代理、GitHub Action、K8s sidecar 四种接入方式。
 
-SWE-bench Lite Scale-20 实测（同模型同预算，20 实例配对）：
+**SWE-bench Lite Scale-20 实测**（同模型同预算，20 实例配对）：
 
 | 组别 | resolved | 门禁拦截 | 平均耗时 |
 |---|---|---|---|
@@ -45,24 +50,40 @@ SWE-bench Lite Scale-20 实测（同模型同预算，20 实例配对）：
 pip install phase-barrier
 ```
 
+</details>
+
 ### [alpha-swe](https://github.com/Xuqing0415/alpha-swe) — 最小可扩展的 SWE Agent
 
-异步状态机 + DAG 任务调度，长期记忆闭环（经验/代码/错误多后端可插拔），
-技能注入、上下文压缩、安全沙箱、多 Agent 协作与用户中断。
+异步状态机 + DAG 任务调度，长期记忆闭环（经验/代码/错误多后端可插拔），技能注入、上下文压缩、安全沙箱、多 Agent 协作与用户中断。
 
-phase-barrier 已通过编排器钩子 SDK 双向接入 —— 校验逻辑留在 phase-barrier 内部，
-Agent 侧只做轻量调用，职责不越界。
+<details>
+<summary>展开：和 phase-barrier 的接入方式</summary>
+
+phase-barrier 已通过编排器钩子 SDK 双向接入 —— 校验逻辑留在 phase-barrier 内部，Agent 侧只做轻量调用，职责不越界。
+
+</details>
 
 ### [OxideDB](https://github.com/Xuqing0415/OxideDB) — 分布式事务 KV 数据库
 
 Python 实现：Raft 复制 + Percolator 式两阶段提交（跨节点 ACID）+ MVCC 快照读 + 范围分片键空间。
+
+<details>
+<summary>展开：版本、测试规模与已知边界</summary>
+
 v0.1.0 时 414 项测试通过。定位是**能跑的原型**而非生产数据库，已知缺口在 `docs/design.md` 里写得很直白。
+
+</details>
 
 ### [llm_compliance_audit](https://github.com/Xuqing0415/llm_compliance_audit) — LLM 合规审计网关
 
-挡在 OpenAI 兼容 API 前面的反向代理：身份证 / 手机号 / 银行卡 / 邮箱等 PII 出境默认拦截，
-提示词注入、命令注入、SQL 注入独立规则。响应侧**先拦后放**——非流式整体扫描后下发，
-SSE 流式走滑动窗口，命中即终止帧，敏感内容零泄露。审计日志正文脱敏 + SHA-256 链式哈希防篡改。
+挡在 OpenAI 兼容 API 前面的反向代理：身份证 / 手机号 / 银行卡 / 邮箱等 PII 出境默认拦截，提示词注入、命令注入、SQL 注入独立规则。
+
+<details>
+<summary>展开：响应侧的拦法与审计日志</summary>
+
+响应侧**先拦后放**——非流式整体扫描后下发，SSE 流式走滑动窗口，命中即终止帧，敏感内容零泄露。审计日志正文脱敏 + SHA-256 链式哈希防篡改。
+
+</details>
 
 ### [DistributedMQ](https://github.com/Xuqing0415/DistributedMQ) — 高性能分布式消息队列
 
